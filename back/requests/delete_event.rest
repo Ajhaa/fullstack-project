@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/events/1
+DELETE http://localhost:3001/api/events/1

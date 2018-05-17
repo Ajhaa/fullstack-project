@@ -25,7 +25,7 @@ eventsRouter.delete('/:id', async (request, response) => {
     }
 })
 
-eventsRouter.post('/', (request, response) => {
+eventsRouter.post('/', async (request, response) => {
     const body = request.body
 
     if (body.title === undefined) {
@@ -38,12 +38,11 @@ eventsRouter.post('/', (request, response) => {
         points: body.points || 5,
     }
 
-    sequelize.sync()
-        .then(() => Event.create({
+    await Event.create({
             type: event.type,
             title: event.title,
             points: event.points
-        }))
+    })
 
     response.json(event)
 })
