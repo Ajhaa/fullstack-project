@@ -11,7 +11,9 @@
   "author": "Atte Haarni",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "sequelize": "^4.37.7",
+    "sqlite3": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.4"

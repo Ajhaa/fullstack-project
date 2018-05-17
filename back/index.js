@@ -2,38 +2,40 @@ const http = require('http')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize('sqlite:database.db')
+
+const Event = sequelize.define('event', {
+    type: Sequelize.STRING,
+    title: Sequelize.STRING,
+    points: Sequelize.INTEGER
+})
 
 app.use(bodyParser.json())
 
-let events = [
-    {id: 0, type: 'event',title: 'lukuvuoden varaslähtö', points: 5},
-    {id: 1, type: 'challenge' ,title: 'kättele rehtoria', points: 3},
-    {id: 2, type: 'event', title: 'fuksiaiset', points: 5},
-    {id: 3, type: 'event', title: 'siivous', points: 1}
-]
 
-app.get('/events', (request, response) => {
+app.get('/events', async (request, response) => {
+    const events = await Event.findAll()
     response.json(events)
 })
 
-app.get('/events/:id', (request, response) => {
+app.get('/events/:id', async (request, response) => {
     const id = Number(request.params.id)
-    const event = events.find(event => event.id === id)
+    const event = await Event.findById(id)
     response.json(event)
 })
 
-app.delete('/events/:id', (request, response) => {
-    const id = Number(request.params.id)
-    events = events.filter(event => event.id !== id)
+app.delete('/events/:id', async (request, response) => {
+    try {
+        const id = Number(request.params.id)
+        const event = await Event.findById(id)
+        await event.destroy()
 
-    response.status(204).end()
+        response.status(204).end()
+    } catch (e) {
+        console.log(e)
+    }
 })
-
-const generateId = () => {
-    const ids = events.map(event => event.id)
-    const maxId = Math.max(...ids)
-    return maxId + 1
-}
 
 app.post('/events', (request, response) => {
     const body = request.body
@@ -43,13 +45,17 @@ app.post('/events', (request, response) => {
     }
 
     const event = {
-        id: generateId(),
         type: body.type || "event",
         title: body.title,
         points: body.points || 5,
     }
 
-    events = events.concat(event)
+    sequelize.sync()
+        .then(() => Event.create({
+            type: event.type,
+            title: event.title,
+            points: event.points
+        }))
 
     response.json(event)
 })

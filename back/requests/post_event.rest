@@ -3,6 +3,6 @@ Content-Type: application/json
 
 {
     "type": "event",
-    "title": "testisauna",
+    "title": "testisauna2",
     "points": "0"
 }
