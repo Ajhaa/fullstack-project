@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const { User, Event, sequelize } = require('../models/db')
 
@@ -16,15 +17,20 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
     try {
         const body = request.body
+
+        const passwordHash = await bcrypt.hash(body.password, 10)
+
         await User.create({
             username: body.username,
             realname: body.realname,
+            passwordHash,
             isAdmin: body.isAdmin
         })
 
         response.json(body)
     } catch (e) {
         console.log(e)
+        response.status(500)
     }
 })
 
