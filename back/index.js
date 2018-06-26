@@ -1,6 +1,7 @@
 const http = require('http')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
@@ -9,6 +10,7 @@ const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const db = require('./models/db')
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
