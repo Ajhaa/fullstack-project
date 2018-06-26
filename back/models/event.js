@@ -1,10 +1,10 @@
-const Sequelize = require('sequelize')
-const sequelize = new Sequelize("sqlite:database.db")
 
-const Event = sequelize.define('event', {
-    type: Sequelize.STRING,
-    title: Sequelize.STRING,
-    points: Sequelize.INTEGER
-})
+const Event = (sequelize, DataTypes) => {
+    return sequelize.define('event', {
+        type: DataTypes.STRING,
+        title: DataTypes.STRING,
+        points: DataTypes.INTEGER
+    })
+}
 
 module.exports = Event

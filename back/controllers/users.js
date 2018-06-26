@@ -1,5 +1,5 @@
 const usersRouter = require('express').Router()
-const User = require('../models/user')
+const { User } = require('../models/db')
 
 usersRouter.get('/', async (request, response) => {
     try {
@@ -12,7 +12,6 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
     try {
-        await User.sync()
         const body = request.body
         await User.create({
             username: body.username,

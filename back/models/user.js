@@ -1,10 +1,11 @@
-const Sequelize = require('sequelize')
-const sequelize = new Sequelize("sqlite:database.db")
 
-const User = sequelize.define('user', {
-    username: Sequelize.STRING,
-    realname: Sequelize.STRING,
-    isAdmin: Sequelize.BOOLEAN
-})
+const User = (sequelize, DataTypes) => {
+    return sequelize.define('user', {
+        username: DataTypes.STRING,
+        realname: DataTypes.STRING,
+        isAdmin: DataTypes.BOOLEAN
+    })
+}
+
 
 module.exports = User
