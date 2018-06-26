@@ -1,5 +1,5 @@
 const eventsRouter = require('express').Router()
-const { Event } = require('../models/db')
+const {User, Event } = require('../models/db')
 
 
 eventsRouter.get('/', async (request, response) => {
@@ -27,7 +27,7 @@ eventsRouter.delete('/:id', async (request, response) => {
 
 eventsRouter.post('/', async (request, response) => {
     const body = request.body
-
+    console.log('BODY', body)
     if (body.title === undefined) {
         return response.status(400).json({error: "title missing"})
     }
@@ -45,6 +45,17 @@ eventsRouter.post('/', async (request, response) => {
     })
 
     response.json(event)
+})
+
+eventsRouter.post('/:eventId/users/:userId', async (request, response) => {
+    let userId = request.params.userId
+    let eventId = request.params.eventId
+
+    let user = await User.findById(userId)
+    let event = await Event.findById(eventId)
+    await event.addUser(user)
+    console.log('User ' + user.username + ' added to ' + event.title)
+    response.status(200).end()
 })
 
 
