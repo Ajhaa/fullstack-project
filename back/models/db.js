@@ -10,4 +10,4 @@ const init = () => {
     sequelize.sync()
 }
 
-module.exports = { init, User, Event}
+module.exports = { init, User, Event, sequelize }

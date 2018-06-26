@@ -1,9 +1,12 @@
 const usersRouter = require('express').Router()
-const { User } = require('../models/db')
+const { User, Event, sequelize } = require('../models/db')
 
 usersRouter.get('/', async (request, response) => {
     try {
-        const users = await User.findAll()
+        const users = await User.findAll({
+            attributes: {include: [[sequelize.fn('SUM', sequelize.col('points')), 'score']]},
+            include: [{model: Event}]
+        })
         response.json(users)
     } catch (e) {
         console.log(e)

@@ -3,13 +3,13 @@ const {User, Event } = require('../models/db')
 
 
 eventsRouter.get('/', async (request, response) => {
-    const events = await Event.findAll()
+    const events = await Event.findAll({include: [{model: User}]})
     response.json(events)
 })
 
 eventsRouter.get('/:id', async (request, response) => {
     const id = Number(request.params.id)
-    const event = await Event.findById(id)
+    let event = await Event.findById(id, {include: [{model: User}]})
     response.json(event)
 })
 
@@ -53,7 +53,9 @@ eventsRouter.post('/:eventId/users/:userId', async (request, response) => {
 
     let user = await User.findById(userId)
     let event = await Event.findById(eventId)
+
     await event.addUser(user)
+
     console.log('User ' + user.username + ' added to ' + event.title)
     response.status(200).end()
 })
