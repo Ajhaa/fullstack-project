@@ -6,4 +6,7 @@
 |       | 1     | Battling with sequelize |
 | 26.6  | 2     | Improvement with sequelize |
 |       | 1     | Login in backend |
-| Total | 7     |
+|       | 1     | Started frontend |
+| 27.6  | 2     | More sequelize learning, more fronted |
+| 28.6  | 1     | Frontend login v1 |
+| Total | 11    |

@@ -8,6 +8,7 @@ usersRouter.get('/', async (request, response) => {
             attributes: {include: [[sequelize.fn('SUM', sequelize.col('points')), 'score']]},
             include: [{model: Event}]
         })
+        console.log(users)
         response.json(users)
     } catch (e) {
         console.log(e)
