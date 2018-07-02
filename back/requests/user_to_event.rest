@@ -1,1 +1,2 @@
-POST http://localhost:3001/api/events/1/users/1
+POST http://localhost:3001/api/events/1/
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvdGUiLCJpZCI6MSwiaWF0IjoxNTMwMTkwNzMzfQ.Kh-ClpmYShbmxheRWFnDJFkTlf_bvX67Tyh8CssLcTU

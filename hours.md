@@ -8,5 +8,5 @@
 |       | 1     | Login in backend |
 |       | 1     | Started frontend |
 | 27.6  | 2     | More sequelize learning, more fronted |
-| 28.6  | 1     | Frontend login v1 |
-| Total | 11    |
+| 28.6  | 2     | Frontend login |
+| Total | 12    |

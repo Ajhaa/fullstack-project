@@ -27,7 +27,16 @@ const LoginForm = (props) => (
   </form>
 )
 
-
+const UserScore = (props) => {
+  if (user === null) {
+    return <div />
+  }
+  return (
+    <div>
+      <div>score: {user.score}</div>
+    </div>
+  )
+}
 
 class App extends Component {
   constructor(props) {
@@ -62,11 +71,20 @@ class App extends Component {
         password: this.state.password
       })
 
-      console.log('USER:', user)
+      console.log("USER:", user)
 
       this.setState({ username: '', password: '', user: user })
     } catch (error) {
       console.log('ERROR: invalid username or password')
+    }
+  }
+
+  userToEvent = async (id) => {
+    console.log("USER TO EVENT")
+    try {
+      await eventService.connectToEvent(id, this.state.user.token)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -76,7 +94,7 @@ class App extends Component {
       <div className="App">
         <h4>Events: </h4>
         <div>
-          {this.state.events.map(e => <div key={e.id}>{e.title}</div>)}
+          {this.state.events.map(e => <div onClick={ () => this.userToEvent(e.id) } key={e.id}>{e.title}</div>)}
         </div>
         <LoginForm
           username = { this.state.username }
@@ -85,6 +103,7 @@ class App extends Component {
           handleUsername = { this.handleLoginField }
           handleLogin = { this.handleLogin }
         />
+        <UserScore user={this.state.user} />
       </div>
     );
   }
