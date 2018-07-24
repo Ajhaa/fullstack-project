@@ -5,11 +5,13 @@ const { Event, User, sequelize } = require('../models/db')
 
 loginRouter.post('/', async (request, response) => {
   const body = request.body
-  const user = await User.findAll({
+  const users = await User.findAll({
     attributes: { include: [[sequelize.fn('SUM', sequelize.col('points')), 'score']] },
     include: [{ model: Event }],
     where: { username: body.username }
   })
+
+  const user = users[0]
 
   console.log('USER', user)
   const passwordCorrect = user === null ?

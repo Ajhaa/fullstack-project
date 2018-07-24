@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import eventService from './services/events'
 import loginService from './services/login'
+import userService from './services/users'
 
 const LoginForm = (props) => (
   <form onSubmit={props.handleLogin}>
@@ -27,16 +28,36 @@ const LoginForm = (props) => (
   </form>
 )
 
-const UserScore = (props) => {
-  if (user === null) {
-    return <div />
-  }
-  return (
+const RegistrationForm = (props) => (
+  <form onSubmit={props.handleRegistration}>
+    <h4>Register</h4>
+    <div>Username:</div>
+    <input
+      name="regUsername"
+      value={props.username}
+      onChange={props.handleUsername}
+      type="text"
+    />
+    <div>Name:</div>
+    <input
+      name="realname"
+      value={props.realname}
+      onChange={props.handleRealname}
+      type="text"
+    />
+    <div>Password:</div>
+    <input
+      name="regPassword"
+      value={props.password}
+      onChange={props.handlePassword}
+      type="text"
+    />
     <div>
-      <div>score: {user.score}</div>
+      <button type="submit">register</button>
     </div>
-  )
-}
+  </form>
+)
+
 
 class App extends Component {
   constructor(props) {
@@ -45,6 +66,9 @@ class App extends Component {
       events: [],
       username: '',
       password: '',
+      regUsername: '',
+      regPassword: '',
+      realname: '',
       user: null
     }
   }
@@ -79,6 +103,20 @@ class App extends Component {
     }
   }
 
+  handleRegistration = async (event) => {
+    event.preventDefault()
+    console.log("REGISTRATION ATTEMPT")
+    try {
+      await userService.createUser({
+        username: this.state.regUsername,
+        realname: this.state.realname,
+        password: this.state.regPassword
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   userToEvent = async (id) => {
     console.log("USER TO EVENT")
     try {
@@ -103,7 +141,15 @@ class App extends Component {
           handleUsername = { this.handleLoginField }
           handleLogin = { this.handleLogin }
         />
-        <UserScore user={this.state.user} />
+        <RegistrationForm
+          username = {this.state.regUsername}
+          password = {this.state.regPassword}
+          realname = {this.state.realname}
+          handleUsername = {this.handleLoginField}
+          handlePassword = {this.handleLoginField}
+          handleRealname = {this.handleLoginField}
+          handleRegistration = {this.handleRegistration}
+        />
       </div>
     );
   }

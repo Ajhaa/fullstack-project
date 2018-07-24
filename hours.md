@@ -7,6 +7,7 @@
 | 26.6  | 2     | Improvement with sequelize |
 |       | 1     | Login in backend |
 |       | 1     | Started frontend |
-| 27.6  | 2     | More sequelize learning, more fronted |
+| 27.6  | 2     | More sequelize learning, more frontend |
 | 28.6  | 2     | Frontend login |
-| Total | 12    |
+| 24.7  | 0.5   | frontend registration |
+| Total | 12.5  |
