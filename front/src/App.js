@@ -1,63 +1,10 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import eventService from './services/events'
 import loginService from './services/login'
 import userService from './services/users'
-
-const LoginForm = (props) => (
-  <form onSubmit={props.handleLogin}>
-    <div>Login:</div>
-    <div>
-      <input
-        name="username"
-        value={props.username}
-        onChange={props.handleUsername}
-        type="text"
-      />
-    </div>
-    <div>
-      <input
-      name="password"
-      value={props.password}
-      onChange={props.handlePassword}
-      type="text"
-    />
-    </div>
-    <div>
-      <button type="submit">login</button>
-    </div>
-  </form>
-)
-
-const RegistrationForm = (props) => (
-  <form onSubmit={props.handleRegistration}>
-    <h4>Register</h4>
-    <div>Username:</div>
-    <input
-      name="regUsername"
-      value={props.username}
-      onChange={props.handleUsername}
-      type="text"
-    />
-    <div>Name:</div>
-    <input
-      name="realname"
-      value={props.realname}
-      onChange={props.handleRealname}
-      type="text"
-    />
-    <div>Password:</div>
-    <input
-      name="regPassword"
-      value={props.password}
-      onChange={props.handlePassword}
-      type="text"
-    />
-    <div>
-      <button type="submit">register</button>
-    </div>
-  </form>
-)
-
+import LoginForm from './components/LoginForm'
+import RegistrationForm from './components/RegistrationForm'
 
 class App extends Component {
   constructor(props) {
@@ -80,6 +27,12 @@ class App extends Component {
         this.setState({ events: data })
         console.log(this.state.events)
       })
+
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({user})
+    }
   }
 
   handleLoginField = (event) => {
@@ -88,14 +41,14 @@ class App extends Component {
 
   handleLogin = async (event) => {
     event.preventDefault()
-    console.log("LOGIN ATTEMPT")
+
     try {
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
 
-      console.log("USER:", user)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
 
       this.setState({ username: '', password: '', user: user })
     } catch (error) {
@@ -130,26 +83,41 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h4>Events: </h4>
-        <div>
-          {this.state.events.map(e => <div onClick={ () => this.userToEvent(e.id) } key={e.id}>{e.title}</div>)}
-        </div>
-        <LoginForm
-          username = { this.state.username }
-          password = { this.state.password }
-          handlePassword = { this.handleLoginField }
-          handleUsername = { this.handleLoginField }
-          handleLogin = { this.handleLogin }
-        />
-        <RegistrationForm
-          username = {this.state.regUsername}
-          password = {this.state.regPassword}
-          realname = {this.state.realname}
-          handleUsername = {this.handleLoginField}
-          handlePassword = {this.handleLoginField}
-          handleRealname = {this.handleLoginField}
-          handleRegistration = {this.handleRegistration}
-        />
+        <Router>
+          <div>
+            <div>
+              {this.state.user === null ? <div>not logged in</div> : <div>Logged in as {this.state.user.username}</div>}
+            </div>
+            <Route exact path="/" render={() =>
+              <div>
+                <h4>Events: </h4>
+                <div>
+                  {this.state.events.map(e => <div onClick={() => this.userToEvent(e.id)} key={e.id}>{e.title}</div>)}
+                </div>
+              </div>}
+            />
+            <Route path="/login" render={() =>
+              <LoginForm
+                username={this.state.username}
+                password={this.state.password}
+                handlePassword={this.handleLoginField}
+                handleUsername={this.handleLoginField}
+                handleLogin={this.handleLogin}
+              />}
+            />
+            <Route path="/register" render={() =>
+              <RegistrationForm
+                username={this.state.regUsername}
+                password={this.state.regPassword}
+                realname={this.state.realname}
+                handleUsername={this.handleLoginField}
+                handlePassword={this.handleLoginField}
+                handleRealname={this.handleLoginField}
+                handleRegistration={this.handleRegistration}
+              />}
+            />
+          </div>
+        </Router>
       </div>
     );
   }

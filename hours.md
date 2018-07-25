@@ -10,4 +10,5 @@
 | 27.6  | 2     | More sequelize learning, more frontend |
 | 28.6  | 2     | Frontend login |
 | 24.7  | 0.5   | frontend registration |
-| Total | 12.5  |
+| 25.7  | 0.5   | React router, login uses localstorage |
+| Total | 13  |
