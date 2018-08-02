@@ -1,8 +1,10 @@
 
 const Event = (sequelize, DataTypes) => {
   return sequelize.define('event', {
-    type: DataTypes.STRING,
     title: DataTypes.STRING,
+    description: DataTypes.STRING,
+    date: DataTypes.DATE,
+    type: DataTypes.STRING,
     points: DataTypes.INTEGER
   })
 }

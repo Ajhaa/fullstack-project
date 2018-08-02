@@ -4,7 +4,8 @@ const { User, Event } = require('../models/db')
 
 eventsRouter.get('/', async (request, response) => {
   const events = await Event.findAll({ include: [{ model: User }] })
-  response.json(events)
+  const sorted = events.sort((e1, e2) => e1.date - e2.date)
+  response.json(sorted)
 })
 
 eventsRouter.get('/:id', async (request, response) => {
@@ -32,14 +33,22 @@ eventsRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'title missing' })
   }
 
+  if (body.date === undefined) {
+    return response.status(400).json({ error: 'date missing' })
+  }
+
   const event = {
     type: body.type || 'event',
+    decription: body.description || '',
+    date: body.date,
     title: body.title,
     points: body.points || 5,
   }
 
   await Event.create({
     type: event.type,
+    description: event.decription,
+    date: event.date,
     title: event.title,
     points: event.points
   })
