@@ -30,7 +30,7 @@ loginRouter.post('/', async (request, response) => {
   const token = jwt.sign(auth_user, process.env.SECRET)
   console.log('LOGIN SUCCESFUL')
   response.status(200).send({
-    token, username: user.username, realname: user.realname
+    token, user
   })
 })
 

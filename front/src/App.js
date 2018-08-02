@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import eventService from './services/events'
 import loginService from './services/login'
 import userService from './services/users'
 import LoginForm from './components/LoginForm'
 import RegistrationForm from './components/RegistrationForm'
+import EventView from './components/EventView'
+
 
 class App extends Component {
   constructor(props) {
@@ -20,19 +22,18 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    eventService
-      .getAll()
-      .then(data => {
-        this.setState({ events: data })
-        console.log(this.state.events)
-      })
-
+  async componentDidMount() {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    console.log('USER:', loggedUserJSON)
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      this.setState({user})
+      this.setState({ user })
+      loginService.setAuth()
     }
+
+    let events = await eventService.getAll()
+    this.setState({ events: events })
+
   }
 
   handleLoginField = (event) => {
@@ -49,6 +50,7 @@ class App extends Component {
       })
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      loginService.setAuth()
 
       this.setState({ username: '', password: '', user: user })
     } catch (error) {
@@ -71,13 +73,19 @@ class App extends Component {
   }
 
   userToEvent = async (id) => {
-    console.log("USER TO EVENT")
     try {
       await eventService.connectToEvent(id, this.state.user.token)
     } catch (error) {
       console.log(error)
     }
   }
+
+  eventById = (id) => {
+    console.log(this.state)
+    return this.state.events.find(event => event.id === Number(id))
+  }
+
+
 
 
   render() {
@@ -92,9 +100,14 @@ class App extends Component {
               <div>
                 <h4>Events: </h4>
                 <div>
-                  {this.state.events.map(e => <div onClick={() => this.userToEvent(e.id)} key={e.id}>{e.title}</div>)}
+                  {this.state.events.map(e =>
+                    <div key={e.id}>
+                      <Link to={`event/${e.id}`}>{e.title}</Link>
+                    </div>
+                  )}
                 </div>
-              </div>}
+              </div>
+            }
             />
             <Route path="/login" render={() =>
               <LoginForm
@@ -116,6 +129,12 @@ class App extends Component {
                 handleRegistration={this.handleRegistration}
               />}
             />
+            <Route exact path="/event/:id" render={({ match }) =>
+              <EventView
+                event={this.eventById(match.params.id)}
+                completed="false"
+                onClick={() => this.userToEvent(match.params.id)} />
+            } />
           </div>
         </Router>
       </div>

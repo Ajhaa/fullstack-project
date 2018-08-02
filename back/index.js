@@ -4,6 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 const { tokenExtractor } = require('./utils/middleware')
+const fetchEvents = require('./utils/eventFetcher')
 
 const eventsRouter = require('./controllers/events')
 const usersRouter = require('./controllers/users')
@@ -17,8 +18,9 @@ app.use('/api/events', eventsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
-db.init()
+fetchEvents().then(console.log('fetched'))
 
+db.init()
 const PORT = 3001
 app.listen(PORT, () => {
   console.log('server running on port', PORT)

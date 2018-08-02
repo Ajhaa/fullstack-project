@@ -3,9 +3,8 @@ const User = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     realname: DataTypes.STRING,
     passwordHash: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN
+    role: DataTypes.STRING
   })
 }
-
 
 module.exports = User

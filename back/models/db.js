@@ -8,7 +8,6 @@ let UserEvent = sequelize.define('userEvent', {
 })
 
 
-
 const init = () => {
   User.belongsToMany(Event, { through: UserEvent })
   Event.belongsToMany(User, { through: UserEvent })

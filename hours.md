@@ -11,4 +11,5 @@
 | 28.6  | 2     | Frontend login |
 | 24.7  | 0.5   | frontend registration |
 | 25.7  | 0.5   | React router, login uses localstorage |
-| Total | 13  |
+|       | 1     | View for single event, battling with react router |
+| Total | 14  |
