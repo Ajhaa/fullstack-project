@@ -6,8 +6,8 @@ const fetchEvents = async () => {
     'X-Token': process.env.EVENT_TOKEN
   }
 
-  const response = await axios.get('https://members.tko-aly.fi/api/events', { headers })
-  const events = response.data.filter(e => e.starts > '2018-06-01')
+  const response = await axios.get('https://members.tko-aly.fi/api/events?fromDate=2018-07-01', { headers })
+  const events = response.data
 
   const formattedEvents = events.map(event => (
     {

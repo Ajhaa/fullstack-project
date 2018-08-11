@@ -39,7 +39,7 @@ usersRouter.post('/', async (request, response) => {
       username: body.username,
       realname: body.realname,
       passwordHash,
-      isAdmin: body.isAdmin
+      role: body.role || 'NORMAL'
     })
 
     response.json(body)

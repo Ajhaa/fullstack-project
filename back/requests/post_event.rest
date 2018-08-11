@@ -3,6 +3,8 @@ Content-Type: application/json
 
 {
     "type": "event",
-    "title": "Points party",
-    "points": "5"
+    "description": "hello there",
+    "date": "2018-06-01",
+    "title": "Points not actually",
+    "points": null
 }

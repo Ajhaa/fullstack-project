@@ -1,0 +1,2 @@
+GET http://localhost:3001/api/events?show=all
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImF0dGUiLCJpZCI6MiwiaWF0IjoxNTMzOTgwODE3fQ.4QygwbQsgglN-QBVe1DETd7bsH_C6Gpq1K6TmCMYslQ

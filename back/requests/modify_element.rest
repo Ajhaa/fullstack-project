@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/events/1
+Content-Type: application/json
+
+{
+  "points": 10
+}

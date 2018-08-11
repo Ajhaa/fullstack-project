@@ -5,6 +5,8 @@ const { Event, User, sequelize } = require('../models/db')
 
 loginRouter.post('/', async (request, response) => {
   const body = request.body
+
+  //find the one user, uses findAll, because findOne doesn't work
   const users = await User.findAll({
     attributes: { include: [[sequelize.fn('SUM', sequelize.col('points')), 'score']] },
     include: [{ model: Event }],
@@ -17,8 +19,8 @@ loginRouter.post('/', async (request, response) => {
   const passwordCorrect = user === null ?
     false :
     await bcrypt.compare(body.password, user.passwordHash)
+
   if (!(user && passwordCorrect)) {
-    console.log('Tanne!!')
     return response.status(401).send({ error: 'Invalid username or password' })
   }
 

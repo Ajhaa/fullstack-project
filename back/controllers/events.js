@@ -3,18 +3,45 @@ const eventsRouter = require('express').Router()
 const { User, Event } = require('../models/db')
 
 eventsRouter.get('/', async (request, response) => {
+  const show = request.query.show
+
+  const userId = request.userId
+
+  if (userId == null) {
+    return response.status(401).json({ error: 'invalid token' })
+  }
+  const user = await User.findById(userId)
+
   const events = await Event.findAll({ include: [{ model: User }] })
-  const sorted = events.sort((e1, e2) => e1.date - e2.date)
-  response.json(sorted)
+
+  if (!show) {
+    response.json(events.filter(e => e.points !== null))
+  } else if (show === 'all') {
+    if (user.role !== 'ADMIN') {
+      response.status(401).json({ error: 'must be admin to access this' })
+    }
+    response.json(events)
+  } else if (show === 'only') {
+    response.status(401).json({ error: 'must be admin to access this' })
+    response.json(events.filter(e => e.points === null))
+  }
+
 })
 
 eventsRouter.get('/:id', async (request, response) => {
+  if (request.userId === null) {
+    return response.status(401).end()
+  }
+
   const id = Number(request.params.id)
   let event = await Event.findById(id, { include: [{ model: User }] })
   response.json(event)
 })
 
 eventsRouter.delete('/:id', async (request, response) => {
+  if (request.userId === null) {
+    return response.status(401).end()
+  }
   try {
     const id = Number(request.params.id)
     const event = await Event.findById(id)
@@ -42,7 +69,7 @@ eventsRouter.post('/', async (request, response) => {
     decription: body.description || '',
     date: body.date,
     title: body.title,
-    points: body.points || 5,
+    points: body.points || null,
   }
 
   await Event.create({
@@ -84,5 +111,21 @@ eventsRouter.post('/:eventId/', async (request, response) => {
   }
 })
 
+eventsRouter.put('/:eventId/', async (request, response) => {
+  const id = Number(request.params.eventId)
+  console.log('ID', id)
+  const body = request.body
+
+  try {
+    const eventToUpdate = await Event.findById(id)
+    eventToUpdate.points = body.points
+    console.log('BEFORE AWAIT')
+    await eventToUpdate.save({ fields: ['points'] })
+    console.log('HANGING')
+    response.status(200).end()
+  } catch (error) {
+    response.status(400).json({ error })
+  }
+})
 
 module.exports = eventsRouter
