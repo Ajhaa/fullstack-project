@@ -22,12 +22,12 @@ app.use('/api/login', loginRouter)
 
 db.init()
 
-fetchEvents().then(console.log('fetched'))
+//fetchEvents().then(console.log('fetched'))
 
-setInterval(() => {
+/*setInterval(() => {
   fetchEvents()
   console.log('fetched')
-}, 1000*60*5)
+}, 1000*60*5) */
 
 const PORT = 3001
 app.listen(PORT, () => {

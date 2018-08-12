@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/users/2
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvdGUiLCJpZCI6MSwiaWF0IjoxNTMzOTkzODM0fQ.gX-kjI72cYyGGJv6zfGSp0RqPDQ775MeitGFcSp0of0
+
+{
+  "points": 3,
+  "message": "OOT PARSA"
+}

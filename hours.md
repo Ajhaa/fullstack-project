@@ -15,4 +15,6 @@
 | 2.8   | 2     | Fetching events from TKO-äly event api |
 | 3-10.8| 1    | Despair |
 | 11.8  | 1    | Roles in authorization |
-| Total | 18  |
+|       | 2    | Users rewarding other users started |
+| 12.8  | 1    | Users can give points to other users |
+| Total | 21  |
