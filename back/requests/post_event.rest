@@ -1,10 +1,11 @@
 POST http://localhost:3001/api/events/
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvdGUiLCJpZCI6MSwiaWF0IjoxNTMzOTk3MDAxfQ.C4-NUrrdmBgT1BKQCbjbIeeaeTaj4glzENQClEGzt70
 
 {
     "type": "event",
     "description": "hello there",
     "date": "2018-06-01",
-    "title": "Points not actually",
-    "points": null
+    "title": "Points",
+    "points": 5
 }

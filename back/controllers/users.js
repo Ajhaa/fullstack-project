@@ -4,35 +4,35 @@ const { User, Event, GivenPoints, sequelize } = require('../models/db')
 
 const formatUser = (user, given) => {
   let givenPoints = given.map(g => g.points)
-  let givenScore = givenPoints.reduce((a, b) => a + b)
+  let givenScore = givenPoints.reduce(((a, b) => a + b), 0)
+  let eventScores = user.events.map(e => e.points)
+  let eventScore = eventScores.reduce(((a, b) => a + b), 0)
   let formatted = {
     id: user.id,
     username: user.username,
     realname: user.realname,
-    //score has to be accessed like this, otherwise it is not found
-    //TODO: fix this?
-    score: user.dataValues.score + givenScore,
+    score: eventScore + givenScore,
     events: user.events,
     givenPoints: given
   }
-  console.log('FORMATTED', formatted)
+
   return formatted
 }
 
 usersRouter.get('/', async (request, response) => {
   try {
     const users = await User.findAll({
-      attributes: { include: [[sequelize.fn('SUM', sequelize.col('points')), 'score']] },
       include: [{ model: Event }]
     })
+
     const givenPoints = await GivenPoints.findAll()
-    console.log('POINTS', givenPoints)
+    console.log('USERS', users)
     const formattedUsers = users.map(user => {
       let given = givenPoints.filter(g => g.recieverId === user.id)
       console.log('GIVEN', given)
       return formatUser(user, given)
     })
-    console.log('FROMAGE', formattedUsers)
+
     response.json(formattedUsers)
   } catch (e) {
     console.log(e)
@@ -44,6 +44,12 @@ usersRouter.post('/', async (request, response) => {
     const body = request.body
 
     const passwordHash = await bcrypt.hash(body.password, 10)
+    const duplicate = await User.findAll({where: {username: body.username}})
+    console.log('DUPLICATE CHECK', duplicate)
+
+    if (duplicate.length !== 0) {
+      return response.status(400).json({ error: 'username already exists' })
+    }
 
     await User.create({
       username: body.username,

@@ -17,4 +17,5 @@
 | 11.8  | 1    | Roles in authorization |
 |       | 2    | Users rewarding other users started |
 | 12.8  | 1    | Users can give points to other users |
-| Total | 21  |
+| 13.8  | 1    | Fixed a significant bug in users endpoint |
+| Total | 22  |
